@@ -448,3 +448,53 @@ export default function DoonValleyStore() {
                       <span style={{ color: "#5b6553" }}>Delivery</span>
                       <span>{delivery === 0 ? "Free" : inr(delivery)}</span>
                     </div>
+                    {delivery > 0 && (
+                      <p className="text-[11px] mb-3" style={{ color: C.amber }}>
+                        Add {inr(FREE_DELIVERY_OVER - subtotal)} more for free delivery
+                      </p>
+                    )}
+                    <div className="flex justify-between font-semibold text-base mb-4 pt-2" style={{ borderTop: `1px solid ${C.line}`, color: C.ink }}>
+                      <span>Total</span>
+                      <span>{inr(total)}</span>
+                    </div>
+                    <button
+                      onClick={placeOrder}
+                      className="w-full rounded-full py-3 font-body font-medium text-sm flex items-center justify-center gap-2 focus-ring"
+                      style={{ background: C.green, color: C.paper }}
+                    >
+                      Place order <ArrowRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center px-8 text-center fade-in">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mb-5 stamp-in"
+                  style={{ border: `2px solid ${C.green}` }}
+                >
+                  <Check size={26} style={{ color: C.green }} />
+                </div>
+                <h3 className="font-display font-semibold text-xl mb-1">Order confirmed</h3>
+                <p className="font-mono text-xs mb-4" style={{ color: "#8a927f" }}>
+                  Receipt No. {orderNo}
+                </p>
+                <p className="text-sm mb-6" style={{ color: "#5b6553" }}>
+                  Thanks for shopping local. Your order of {inr(total)} will be packed today and
+                  delivered within 24 hours.
+                </p>
+                <button
+                  onClick={closeReceipt}
+                  className="rounded-full px-6 py-2.5 text-sm font-medium focus-ring"
+                  style={{ background: C.ink, color: C.paper }}
+                >
+                  Back to shop
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
