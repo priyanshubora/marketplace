@@ -347,4 +347,104 @@ export default function DoonValleyStore() {
                       <span className="font-mono font-medium text-sm" style={{ color: C.ink }}>
                         {inr(p.price)}
                       </span>
-                      <span className="text-[11px] ml-1" style={{ color: "#8a927f" }}></span>
+                      <span className="text-[11px] ml-1" style={{ color: "#8a927f" }}>
+                        / {p.weight}
+                      </span>
+                    </div>
+                    {qty === 0 ? (
+                      <button
+                        onClick={() => addToCart(p.id)}
+                        className="text-xs font-medium px-3 py-1.5 rounded-full focus-ring"
+                        style={{ background: C.green, color: C.paper }}
+                      >
+                        Add
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-1 rounded-full px-1" style={{ background: C.paper, border: `1px solid ${C.line}` }}>
+                        <button onClick={() => setQty(p.id, qty - 1)} className="p-1.5 focus-ring" aria-label={`Remove one ${p.name}`}>
+                          <Minus size={12} style={{ color: C.ink }} />
+                        </button>
+                        <span className="font-mono text-xs w-4 text-center">{qty}</span>
+                        <button onClick={() => setQty(p.id, qty + 1)} className="p-1.5 focus-ring" aria-label={`Add one more ${p.name}`}>
+                          <Plus size={12} style={{ color: C.ink }} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </main>
+
+      <footer className="max-w-6xl mx-auto px-5 py-8 text-xs" style={{ color: "#8a927f", borderTop: `1px solid ${C.line}` }}>
+        Doon Valley Store · Rajpur Road, Dehradun, Uttarakhand · Open 9am–8pm daily
+      </footer>
+
+      {/* ---------- cart drawer ---------- */}
+      {cartOpen && (
+        <div className="fixed inset-0 z-40 fade-in">
+          <div className="absolute inset-0" style={{ background: "rgba(38,48,31,0.35)" }} onClick={() => setCartOpen(false)} />
+          <div
+            className="absolute right-0 top-0 h-full w-full max-w-sm drawer-in flex flex-col"
+            style={{ background: C.paper }}
+          >
+            {!orderPlaced ? (
+              <>
+                <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${C.line}` }}>
+                  <h3 className="font-display font-semibold text-lg">Your bill</h3>
+                  <button onClick={() => setCartOpen(false)} className="p-1 focus-ring" aria-label="Close cart">
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-5 py-4">
+                  {cartLines.length === 0 ? (
+                    <p className="text-sm mt-8 text-center" style={{ color: "#8a927f" }}>
+                      Your bill is empty. Add something from the shelf.
+                    </p>
+                  ) : (
+                    <div className="space-y-4 font-mono text-sm">
+                      {cartLines.map((l) => (
+                        <div key={l.id} className="flex items-start gap-3">
+                          <div className="w-10 h-10 shrink-0" style={{ opacity: 0.9 }}>
+                            {(() => {
+                              const Icon = ICONS[l.icon];
+                              return <Icon />;
+                            })()}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-body font-medium text-[13px] truncate" style={{ color: C.ink }}>
+                              {l.name}
+                            </p>
+                            <p className="text-[11px]" style={{ color: "#8a927f" }}>
+                              {inr(l.price)} × {l.qty}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 rounded-full px-1 shrink-0" style={{ background: C.paperDk, border: `1px solid ${C.line}` }}>
+                            <button onClick={() => setQty(l.id, l.qty - 1)} className="p-1 focus-ring" aria-label={`Remove one ${l.name}`}>
+                              <Minus size={11} />
+                            </button>
+                            <span className="text-xs w-4 text-center">{l.qty}</span>
+                            <button onClick={() => setQty(l.id, l.qty + 1)} className="p-1 focus-ring" aria-label={`Add one more ${l.name}`}>
+                              <Plus size={11} />
+                            </button>
+                          </div>
+                          <span className="text-xs w-14 text-right shrink-0">{inr(l.price * l.qty)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {cartLines.length > 0 && (
+                  <div className="torn-edge px-5 pt-5 pb-6 font-mono text-sm" style={{ borderTop: `1px dashed ${C.line}` }}>
+                    <div className="flex justify-between mb-1">
+                      <span style={{ color: "#5b6553" }}>Subtotal</span>
+                      <span>{inr(subtotal)}</span>
+                    </div>
+                    <div className="flex justify-between mb-3">
+                      <span style={{ color: "#5b6553" }}>Delivery</span>
+                      <span>{delivery === 0 ? "Free" : inr(delivery)}</span>
+                    </div>
